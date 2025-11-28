@@ -7,19 +7,9 @@ const ticketController = {
     try {
       const user = new modelticket(req.body);
       await user.save();
-
-      res.status(201).json({
-        success: true,
-        message: "Ticket created successfully",
-        data: user
-      });
-
+      res.status(201).json({ success: true, message: "Ticket created", data: user });
     } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: "Invalid data",
-        error: error.message
-      });
+      res.status(400).json({ success: false, error: error.message });
     }
   },
 
@@ -33,10 +23,10 @@ const ticketController = {
     }
   },
 
-  // GET ONE — using UUID ticketId
+  // GET ONE — by MongoDB _id
   userGet: async (req, res) => {
     try {
-      const user = await modelticket.findOne({ ticketId: req.params.id });
+      const user = await modelticket.findById(req.params.id);
       if (!user) return res.status(404).json({ message: "Ticket not found" });
       res.json(user);
     } catch (error) {
@@ -44,11 +34,11 @@ const ticketController = {
     }
   },
 
-  // UPDATE ONE — using UUID ticketId
+  // UPDATE by _id
   userUpdate: async (req, res) => {
     try {
-      const updated = await modelticket.findOneAndUpdate(
-        { ticketId: req.params.id },
+      const updated = await modelticket.findByIdAndUpdate(
+        req.params.id,
         req.body,
         { new: true }
       );
@@ -59,10 +49,10 @@ const ticketController = {
     }
   },
 
-  // DELETE ONE — using UUID ticketId
+  // DELETE by _id
   userDelete: async (req, res) => {
     try {
-      const deleted = await modelticket.findOneAndDelete({ ticketId: req.params.id });
+      const deleted = await modelticket.findByIdAndDelete(req.params.id);
       if (!deleted) return res.status(404).json({ message: "Ticket not found" });
       res.json({ message: "Deleted", deleted });
     } catch (error) {
