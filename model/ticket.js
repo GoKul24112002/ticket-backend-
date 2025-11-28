@@ -8,8 +8,8 @@ const ticketSchema = new mongoose.Schema({
   ticketId: { type: String, unique: true, default: () => uuidv4() },
   title: { type: String, required: true },
   description: { type: String },
-  status: { type: String, default: 'open' },
-  priority: { type: String, default: 'low' }
+  status: { type: String},
+  priority: { type: String }
 }, {
   timestamps: true   // correct place: schema options
 });
